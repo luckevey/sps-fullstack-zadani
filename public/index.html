@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <title>Správa knih v antikvariátu</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1>Správa knih</h1>
+
+  <form id="book-form">
+    <input type="hidden" id="book-id" />
+    <input type="text" id="title" placeholder="Název knihy" required />
+    <input type="text" id="author" placeholder="Autor" required />
+    <input type="number" id="year" placeholder="Rok vydání" />
+    <input type="text" id="description" placeholder="Popis" required />
+    <select id="category_id" required></select>
+    <button type="submit">Uložit knihu</button>
+  </form>
+
+
+<input type="text" id="search-input" placeholder="Vyhledat knihu..." />
+  <button id="search-button">Hledat</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Název</th>
+        <th>Autor</th>
+        <th>Rok</th>
+        <th>Kategorie</th>
+        <th>Popis</th>
+        <th>Akce</th>
+      </tr>
+    </thead>
+    <tbody id="books-table"></tbody>
+  </table>
+
+  <h2>Správa kategorií</h2>
+
+  <form id="category-form">
+    <input type="text" id="category-name" placeholder="Název kategorie" required />
+    <button type="submit">Přidat kategorii</button>
+  </form>
+
+  <ul id="category-list"></ul>
+
+  <script>
+    const bookForm = document.getElementById('book-form');
+    const bookTable = document.getElementById('books-table');
+    const categorySelect = document.getElementById('category_id');
+
+    const categoryForm = document.getElementById('category-form');
+    const categoryList = document.getElementById('category-list');
+
+    // === KNIHY ===
+    const searchInput = document.getElementById('search-input');
+
+function loadBooks(filter = '') {
+  fetch('/api/books')
+    .then(res => res.json())
+    .then(books => {
+      const filteredBooks = books.filter(book => {
+        const search = filter.toLowerCase();
+        return (
+          book.title.toLowerCase().includes(search) ||
+          book.author.toLowerCase().includes(search) ||
+          (book.year && book.year.toString().includes(search)) ||
+          (book.category_name && book.category_name.toLowerCase().includes(search)) ||
+          (book.description && book.description.toLowerCase().includes(search))
+        );
+      });
+
+      bookTable.innerHTML = '';
+      filteredBooks.forEach(book => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${book.title}</td>
+          <td>${book.author}</td>
+          <td>${book.year || ''}</td>
+          <td>${book.category_name || ''}</td>
+          <td>${book.description || ''}</td>
+          <td>
+            <button onclick="editBook(${book.id})">Upravit</button>
+            <button onclick="deleteBook(${book.id})">Smazat</button>
+          </td>
+        `;
+        bookTable.appendChild(row);
+      });
+    });
+}
+
+// Posluchač pro vyhledávání
+searchInput.addEventListener('input', () => {
+  loadBooks(searchInput.value);
+});
+
+
+    function editBook(id) {
+      fetch(`/api/books/${id}`)
+        .then(res => res.json())
+        .then(book => {
+          document.getElementById('book-id').value = book.id;
+          document.getElementById('title').value = book.title;
+          document.getElementById('author').value = book.author;
+          document.getElementById('year').value = book.year;
+          document.getElementById('category_id').value = book.category_id;
+          document.getElementById('description').value = book.description || '';
+        });
+    }
+
+    function deleteBook(id) {
+      if (confirm('Smazat tuto knihu?')) {
+        fetch(`/api/books/${id}`, { method: 'DELETE' })
+          .then(() => loadBooks());
+      }
+    }
+
+    bookForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const id = document.getElementById('book-id').value;
+      const data = {
+        title: document.getElementById('title').value,
+        author: document.getElementById('author').value,
+        year: parseInt(document.getElementById('year').value) || null,
+        category_id: parseInt(document.getElementById('category_id').value),
+        description: document.getElementById('description').value
+      };
+      const method = id ? 'PUT' : 'POST';
+      const url = id ? `/api/books/${id}` : '/api/books';
+
+      fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      }).then(() => {
+        bookForm.reset();
+        loadBooks();
+      });
+    });
+
+    // === KATEGORIE ===
+    function loadCategories() {
+      fetch('/api/categories')
+        .then(res => res.json())
+        .then(categories => {
+          categorySelect.innerHTML = categories.map(cat =>
+            `<option value="${cat.id}">${cat.name}</option>`
+          ).join('');
+
+          categoryList.innerHTML = categories.map(cat =>
+            `<li>${cat.name} <button onclick="deleteCategory(${cat.id})">Smazat</button></li>`
+          ).join('');
+        });
+    }
+
+    categoryForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const name = document.getElementById('category-name').value;
+      fetch('/api/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      }).then(() => {
+        categoryForm.reset();
+        loadCategories();
+      });
+    });
+
+    function deleteCategory(id) {
+      if (confirm('Smazat tuto kategorii?')) {
+        fetch(`/api/categories/${id}`, { method: 'DELETE' })
+          .then(() => loadCategories());
+      }
+    }
+
+    // === INIT ===
+    loadBooks();
+    loadCategories();
+  </script>
+</body>
+</html>
