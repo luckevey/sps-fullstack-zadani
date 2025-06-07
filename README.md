@@ -8,3 +8,5 @@
 
 - Popisek
 - Popisek2
+
+node /home/alex_bzhe/IdeaProjects/sps-fullstack-zadani/server.js
