@@ -1,0 +1,21 @@
+{
+  "name": "sps-fullstack_bzhezynska",
+  "version": "1.0.0",
+  "description": "Todo list",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node database/seed.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/luckevey/sps-fullstack_bzhezynska.git"
+  },
+  "author": "Mariia Bzhezynska",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "sqlite3": "^5.1.7"
+  }
+}
+
