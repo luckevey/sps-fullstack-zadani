@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS books (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     author TEXT NOT NULL,
-    year INTEGER,
+    `year` INTEGER,
     category_id INTEGER,
     description TEXT,
     FOREIGN KEY (category_id) REFERENCES categories(id)
