@@ -14,3 +14,7 @@ app.use('/api', apiRoutes);
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+// Pokud žádná předchozí cesta nesedí, vrátíme 404
+app.use((req, res) => {
+  res.status(404).sendFile(__dirname + '/public/404.html');
+});

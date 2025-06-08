@@ -3,23 +3,43 @@ const db = require('../database/db');
 
 const router = express.Router();
 
+// 🛡️ Validační pomocná funkce
+function isInvalidString(str) {
+  return (
+    typeof str !== 'string' ||
+    str.trim() === '' ||
+    /^[\s\.\,\-\_\;\:\(\)\[\]]*$/.test(str)
+  );
+}
+
 /////////////////////////
 // 📚 BOOKS ENDPOINTS //
 /////////////////////////
 
 // LIST
 router.get('/books', (req, res) => {
-  db.all('SELECT books.*, categories.name AS category_name FROM books LEFT JOIN categories ON books.category_id = categories.id', [], (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(rows);
-  });
+  db.all(
+    'SELECT books.*, categories.name AS category_name FROM books LEFT JOIN categories ON books.category_id = categories.id',
+    [],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(rows);
+    }
+  );
 });
 
 // CREATE
 router.post('/books', (req, res) => {
   const { title, author, year, description, category_id } = req.body;
-  if (!title || !author) {
-    return res.status(400).json({ error: 'Title and author are required.' });
+
+  if (
+    isInvalidString(title) ||
+    isInvalidString(author) ||
+    (description && isInvalidString(description))
+  ) {
+    return res
+      .status(400)
+      .json({ error: 'Neplatný titul, autor nebo popis.' });
   }
 
   db.run(
@@ -44,8 +64,15 @@ router.get('/books/:id', (req, res) => {
 // UPDATE
 router.put('/books/:id', (req, res) => {
   const { title, author, year, description, category_id } = req.body;
-  if (!title || !author) {
-    return res.status(400).json({ error: 'Title and author are required.' });
+
+  if (
+    isInvalidString(title) ||
+    isInvalidString(author) ||
+    (description && isInvalidString(description))
+  ) {
+    return res
+      .status(400)
+      .json({ error: 'Neplatný titul, autor nebo popis.' });
   }
 
   db.run(
@@ -53,7 +80,8 @@ router.put('/books/:id', (req, res) => {
     [title, author, year, description, category_id || null, req.params.id],
     function (err) {
       if (err) return res.status(500).json({ error: err.message });
-      if (this.changes === 0) return res.status(404).json({ error: 'Book not found' });
+      if (this.changes === 0)
+        return res.status(404).json({ error: 'Book not found' });
       res.json({ message: 'Book updated' });
     }
   );
@@ -63,7 +91,8 @@ router.put('/books/:id', (req, res) => {
 router.delete('/books/:id', (req, res) => {
   db.run('DELETE FROM books WHERE id = ?', [req.params.id], function (err) {
     if (err) return res.status(500).json({ error: err.message });
-    if (this.changes === 0) return res.status(404).json({ error: 'Book not found' });
+    if (this.changes === 0)
+      return res.status(404).json({ error: 'Book not found' });
     res.json({ message: 'Book deleted' });
   });
 });
@@ -83,7 +112,10 @@ router.get('/categories', (req, res) => {
 // CREATE
 router.post('/categories', (req, res) => {
   const { name } = req.body;
-  if (!name) return res.status(400).json({ error: 'Name is required.' });
+
+  if (isInvalidString(name)) {
+    return res.status(400).json({ error: 'Neplatný název kategorie.' });
+  }
 
   db.run('INSERT INTO categories (name) VALUES (?)', [name], function (err) {
     if (err) return res.status(500).json({ error: err.message });
@@ -95,7 +127,8 @@ router.post('/categories', (req, res) => {
 router.delete('/categories/:id', (req, res) => {
   db.run('DELETE FROM categories WHERE id = ?', [req.params.id], function (err) {
     if (err) return res.status(500).json({ error: err.message });
-    if (this.changes === 0) return res.status(404).json({ error: 'Category not found' });
+    if (this.changes === 0)
+      return res.status(404).json({ error: 'Category not found' });
     res.json({ message: 'Category deleted' });
   });
 });
