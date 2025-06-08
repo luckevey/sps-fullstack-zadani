@@ -1,14 +1,8 @@
 # Mariia Bzhezynska
 ---
 ## Zvolené rozšíření
-- Popisek
-- Popisek2
----
-## Spuštění aplikace
-
-- Popisek
-- Popisek2
-
+- Backend: Node.js + Express + Sqlite3
+- Frontend: HTML + CSS + JS
 
 ## How to run:
 1. fetch from git
@@ -31,7 +25,13 @@
    kill -9 <PID#>
 
 ## TODOs:
-1. add books description in seed.sql
-2. move js from index.html to separate file
-3. make proper column style for categories 
-4. try tailwindcss
+1. add books description in seed.sql // done
+2. move js from index.html to separate file // done
+3. make proper column style for categories  // done
+4. try tailwindcss // блять????
+5. allowed characters validation on fe // done
+6. allowed characters validation on be  // done
+7. metadata on html page // done
+8. favicon // done 
+9. title // done
+10. 404 // done
