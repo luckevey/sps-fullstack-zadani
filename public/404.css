@@ -1,0 +1,57 @@
+body {
+          font-family: Arial, sans-serif;
+          height: 100vh;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          /* Pozadí: obrázek přes celý viewport */
+          background-image: url('book.jpg');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+
+          /* Přidáme lehký tmavý overlay pro lepší čitelnost */
+          position: relative;
+        }
+
+        /* Overlay přes celé pozadí pro kontrast */
+        body::before {
+          content: "";
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(0, 0, 0, 0.3); /* tmavý průhledný filtr */
+          z-index: 0;
+        }
+
+        .container {
+          position: relative; /* aby byl obsah nad overlay */
+          z-index: 1;
+          text-align: center;
+          max-width: 320px;
+          width: 100%;
+        }
+
+        .box {
+          background-color: rgba(245, 240, 230, 0.85); /* béžové s mírnou průhledností */
+          border: 1px solid #dcd2c1;
+          padding: 20px 40px;
+          margin: 10px 0;
+          border-radius: 8px;
+          box-shadow: 0 0 8px rgba(0,0,0,0.15);
+        }
+
+        a.box {
+          display: inline-block;
+          color: #5a4a3c;
+          text-decoration: none;
+          font-weight: bold;
+          padding: 8px 16px;
+          transition: background-color 0.3s ease;
+        }
+
+        a.box:hover {
+          background-color: rgba(224, 215, 198, 0.85);
+        }
