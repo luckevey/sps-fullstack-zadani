@@ -15,11 +15,12 @@ hero:
       link: /api-examples
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Zvolené rozšíření
+    details: Backend - Node.js + Express + Sqlite3 
+    details: Frontend - HTML + CSS + JS
+  - title: Hints
+    details: Get active node processes (PID# is in 2nd column):ps aux | grep node, stop unwanted process by PID:kill -9 <PID#>
+  - title: How to run
+    details: npm install if node_modules not exist, npm run seed, npm start, ctrl + c to end process
 ---
 
