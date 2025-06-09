@@ -16,8 +16,7 @@ hero:
 
 features:
   - title: Zvolené rozšíření
-    details: Backend - Node.js + Express + Sqlite3 
-    details: Frontend - HTML + CSS + JS
+    details: Backend - Node.js + Express + Sqlite3, Frontend - HTML + CSS + JS
   - title: Hints
     details: Get active node processes (PID# is in 2nd column):ps aux | grep node, stop unwanted process by PID:kill -9 <PID#>
   - title: How to run
