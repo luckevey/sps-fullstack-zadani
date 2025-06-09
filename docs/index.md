@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "SPS Fullstack Dokumentace"
   text: "Technickaá dokumentace k projektu \"Správa knih v antikvariátu\""
-  tagline: My great project tagline
+  tagline: Book management application for an antiquarian bookstore
   actions:
     - theme: brand
       text: Markdown Examples
