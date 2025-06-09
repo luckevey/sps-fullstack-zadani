@@ -87,7 +87,7 @@ input:focus, select:focus, textarea:focus {
 button {
   background-color: #5a3e1b;
   color: white;
-  border: none;
+  border: #f5f0e6 2px solid;
   border-radius: 8px;
   padding: 0.5rem 1rem;
   cursor: pointer;
