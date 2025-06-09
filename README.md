@@ -3,6 +3,7 @@
 ## Zvolené rozšíření
 - Backend: Node.js + Express + Sqlite3
 - Frontend: HTML + CSS + JS
+- VitePress
 
 ## How to run:
 1. fetch from git
